@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"
+          content="maximum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    请输入你要查询的菜名称：
+    <input id="selectmenu" type="text" class="form-control" value="">
+    <button id="btn1" type="button" class="btn btn-default">查询</button>
+    <div id="menulist" ></div>
+</div>
+
+</body>
+<script>
+    $(document).ready(function(){
+        var datas;
+        $("#btn1").click(function(){
+            var menu= $("#selectmenu").val();
+            key="b9e64ff3f0c6b6f5af1e524b2e10d7f5";
+            console.log("http://apis.juhe.cn/cook/query.php?menu="+menu+"&key=b9e64ff3f0c6b6f5af1e524b2e10d7f5");
+            $.ajax({
+                url: "http://apis.juhe.cn/cook/query.php?menu="+menu+"&key=b9e64ff3f0c6b6f5af1e524b2e10d7f5",
+                type:"GET",
+                dataType: 'jsonp',
+                /*                data: {"menu":menu,"key":key},*/
+                success: function (data) {
+                    /* var text=$("#menulist");
+                     text.append(data);*/
+                     console.log(data);
+                    $("#menulist").html("");;
+                    if(data.result.data.length!=0)
+                    {
+                        for(var i=0;i<data.result.data.length;i++){//遍历
+                            index =  i+1;
+                            var objTable = $("#menulist");
+                            var img="";
+                            for (var j = 0; j <data.result.data[i].albums.length; j++) {
+
+                                img+="<img src='"+data.result.data[i].albums[j]+"'>"
+
+                            };
+                            $("#menulist").append("<div><div id='title'>菜名："+data.result.data[i].title+"</div>"
+                                    +"  <div id='tags'>功效:"+data.result.data[i].tags+"</div>"
+                                    +" <div id='imtro'>描述:"+data.result.data[i].imtro+"</div>+"
+                                    +"  <div id='ingredients'>描述:"+data.result.data[i].ingredients+"</div>"
+                                    +"  <div id='burden'>描述:"+data.result.data[i].burden+"</div>"
+                                    +"  <div id='albums'>图片:"+img+"</div>"
+                                    +"   </div>")
+                        }
+                    }
+                }
+            });
+
+        });
+    })
+</script>
+</html>
